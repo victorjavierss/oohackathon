@@ -1,0 +1,42 @@
+{% extends "template.twig" %}
+
+{% block bodyclass %}
+    class="auth videos"
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="container">
+    <div class="section">
+
+        <div class="row">
+
+     {% for video in videos %}
+    <div class="col s12 m4">
+        <div class="card small vid-{{ video.embed_code|e }}">
+            <div class="card-image">
+                <img src="{{ video.preview_image_url|e }}" />
+                <span class="card-title text-shadow">{{ video.name|e }}</span>
+            </div>
+            <div class="card-content">
+                <a class="waves-effect waves-light btn" href="edit/{{ video.embed_code|e }}">Edit Cues</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    </div>
+    </div>
+      </div>
+  </div>
+
+
+
+{% endblock %}
+
+
+{% block customJS %}
+    <script src='//player.ooyala.com/v3/a97f9a487d9c4c6c92009fe03b70322e?platform=html5-priority'></script>
+
+    <script src='js/init.js'></script>
+{% endblock %}

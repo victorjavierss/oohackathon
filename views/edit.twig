@@ -1,0 +1,138 @@
+{% extends "template.twig" %}
+
+{% block bodyclass %}
+    class="auth edit-cues"
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="container">
+    <div class="section">
+
+        <h4>Establish the data that you want to display</h4>
+
+        <div class="row">
+            <div class="col s6"><div style="width:500px;height:281px;" ><div id="edit-player" class="player" data-state="loaded" ></div></div></div>
+            <div class="col s6">
+                <div class="row">
+                <form id="cue-editor" class="file-upload" enctype="multipart/form-data">
+                      <input type="hidden" name="MAX_FILE_SIZE" value="524288000" />
+        <div class="input-field col s3">
+          <input id="playhead_time" name="cue_time" type="text" value="00:00">
+          <label for="playhead_time">Time</label>
+        </div>
+        <div class="input-field col s9">
+    <select id="cue-type" name="type">
+      <option value="" disabled selected>Choose your option</option>
+      <option value="info">Information</option>
+      <option value="image">Image</option>
+      <option value="full">Full Content</option>
+      <option value="ad">Advertising</option>
+    </select>
+    <label>Cue Type</label>
+  </div>
+        <div class="input-field col s12">
+          <input id="title_prefix" type="text" name="title" required>
+          <label for="title_prefix">Title</label>
+        </div>
+        <div class="input-field col s12">
+          <input id="short_des" type="text" class="validate" name="description_short">
+          <label for="short_des">Short Description</label>
+        </div>
+        <div class="input-field col s12">
+          <input id="link" name="link" type="url" class="validate" />
+          <label for="link">Link</label>
+        </div>
+
+        <div class="input-field col s12">
+          <textarea id="full_description" name="description_long" class="materialize-textarea"></textarea>
+          <label for="full_description">Full Description</label>
+        </div>
+
+
+
+        <div class="file-field input-field col s12">
+            <div class="btn">
+              <span>Image</span>
+              <input type="file" name="cue_image">
+            </div>
+            <div class="file-path-wrapper">
+              <input class="file-path validate" type="text">
+            </div>
+          </div>
+
+        <div class="input-field col s12 right-align" >
+            <button class="btn waves-effect waves-light" type="submit" name="action">Add Cue</button>
+            <button class="btn waves-effect waves-light" type="button" name="save">Save Cues</button>
+        </div>
+</form>
+      </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+
+            <ul class="cue-collection collection"></ul>
+        </div>
+    </div>
+      </div>
+  </div>
+
+{% endblock %}
+
+
+{% block customJS %}
+    <script src='//player.ooyala.com/v3/ca537f802b054bea8ad2f3148d5c6c63?platform=html5-priority'></script>
+    <script src='js/init.js'></script>
+
+<script>
+
+    var STATUS_PLAY  = 'play';
+    var STATUS_PAUSE = 'pause';
+    var STATUS_END_SCREEN = 'end_screen';
+
+    var embed_code = '{{ video_data.embed_code | e }}';
+    var ooplayer;
+    var initialStateOnFocus;
+
+    (function($){
+        $(function(){
+            initialStateOnFocus = false;
+            ooplayer = OO.Player.create('edit-player', '{{ video_data.embed_code | e }}', {"wmode":"opaque","flashParams":{"hide":"all"}});
+
+            ooplayer.mb.subscribe( OO.EVENTS.PLAY, 'myPage', function() {
+                $('#edit-player').data('status', STATUS_PLAY);
+            });
+
+            ooplayer.mb.subscribe( OO.EVENTS.END_SCREEN_SHOWN, 'myPage', function() {
+                $('#edit-player').data('status', STATUS_END_SCREEN);
+            });
+
+            ooplayer.mb.subscribe( OO.EVENTS.PAUSE, 'myPage', function() {
+                $('#edit-player').data('status', STATUS_PAUSE);
+            });
+
+            ooplayer.mb.subscribe( OO.EVENTS.PLAYHEAD_TIME_CHANGED, 'myPage', function(evt, playheadTime) {
+                $('#playhead_time').val( $('.oo_label.oo_currentTime').html() );
+            });
+
+            $('select').material_select();
+
+            $('#playhead_time').on('blur', function(){
+                var $time = $('#playhead_time').val().split(':');
+                var timeInSeconds = $time[0]*60 + $time[1]*1;
+                ooplayer.setPlayheadTime(timeInSeconds)
+            });
+
+            $('#cue-editor input, #cue-editor textarea').on('focus', function(){
+                initialStateOnFocus = $('#edit-player').data('status');
+                if ( initialStateOnFocus  == STATUS_PLAY ){
+                    ooplayer.pause();
+                }
+            });
+
+        }); // end of document ready
+    })(jQuery); // end of jQuery name space
+</script>
+{% endblock %}

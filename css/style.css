@@ -1,0 +1,36 @@
+.cue-time {
+    position: absolute;
+    top: 58px;
+    left: 0;
+    width: 72px;
+    text-align: center;
+}
+
+.cue-collection em {
+    font-size: 0.8rem;
+}
+
+.card-title {
+    text-shadow: 0 0 10px rgba(0,0,0,1);
+}
+
+.cue-image {
+    padding: 0 15px;
+}
+
+.cue-image .progress{
+    margin-top: 25px;
+}
+
+.cue-image img {
+    width: 100%;
+    height: auto;
+}
+
+.oo_playhead {
+    top:0!important;
+}
+
+li.collection-item {
+    cursor: pointer;
+}

@@ -1,0 +1,58 @@
+{% extends "template.twig" %}
+
+{% block bodyclass %}
+    class="no-auth"
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="section">
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block customJS %}
+    <script type="application/javascript">
+
+        if(window.location.hash == '#sign-out') {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut();
+            auth2.disconnect();
+            location.href = location.href.replace(location.hash, '');
+        }
+
+    function onSignIn(googleUser) {
+
+        // Useful data for your client-side scripts:
+        profile = googleUser.getBasicProfile();
+
+        var requestData = {
+            'profile_pic' : profile.getImageUrl(),
+            'profile_email' : profile.getEmail()
+        };
+
+        $.ajax({
+            type:  'POST',
+            url: 'connect?'+ (Math.random() * 100 + 1),
+            data: requestData,
+            cache:false,
+            success: function( data ) {
+                console.log(data);
+                window.location.href = window.location.href + '/vids';
+            },
+            error: function() {
+                var auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut();
+                auth2.disconnect();
+                location.reload();
+            },
+            dataType: 'json'
+        });
+
+
+    };
+    </script>
+{% endblock %}

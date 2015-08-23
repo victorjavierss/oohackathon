@@ -1,0 +1,32 @@
+{
+    "name": "ooyala/allHandsLive",
+    "description": "",
+    "license": "Apache-2.0",
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "google/apiclient",
+                "version": "1.0.0",
+                "source": {
+                    "url": "https://github.com/google/google-api-php-client.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "autoload": {
+                    "classmap": [
+                        "src/"
+                    ]
+                }
+            }
+        }
+    ],
+    "require": {
+        "silex/silex": "1.0.*@dev",
+        "twig/twig": ">=1.8,<2.0-dev",
+        "google/apiclient": "1.0.*",
+        "symfony/security": "~2.3",
+        "symfony/twig-bridge": "~2.3",
+        "doctrine/dbal": "~2.2"
+    }
+}
